@@ -8,6 +8,10 @@
 # TrobotScout
 TrobotScout is based on TigerScout and we incorporated the changes to support TBA integrations for match data and to provide pre-fill on scout header information when scouting from match to match. Also added a way to export local data and to store the data pipe delimited vs group separator character.
 
+We also added a filter by match so you can see upcoming teams. 
+
+More documentation can be found in this <a href="https://docs.google.com/document/d/19tDT8FQUstQyxJg9LPNh5T04uFRqWmFeg8kahKJBzgs/edit?usp=sharing"> Google Doc </a>
+
 ## TigerScout
 TigerScout is an easy, open source cloud-integrated scouting app made by 4829. It allows for simple and objective scouting, along with useful statistics for strategizing and alliance selection. Firebase cloud integration allows for seamless data syncing, without having to worry about QR codes or CSV files.
 
