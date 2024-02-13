@@ -24,6 +24,7 @@ const initializeFirebaseFromSettings = async () => {
         }
         return getApp();
     } else {
+        
         if (getApps().length !== 0) {
             deleteApp(getApp());
         }
