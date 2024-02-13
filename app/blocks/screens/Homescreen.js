@@ -16,6 +16,7 @@ const Homescreen = ({route, navigation}) => {
     // Prevents the app from erroring out when firebase is first used
     React.useEffect(() => {
         initializeFirebaseFromSettings();
+        
     },[])
 
     // !! TODO MAKE EVERY SINGLE FONT SIZE IN REFERENCE TO VH / VW
@@ -36,7 +37,7 @@ const Homescreen = ({route, navigation}) => {
                 fontFamily: "LGC Light",
                 letterSpacing: 0.5*vw
             }}>
-            <Text style={{fontFamily: "LGC Bold"}}>Trobots 5013 Scouting App - v1.2.2024</Text>
+            <Text style={{fontFamily: "LGC Bold"}}>Trobots 5013 Scouting App - v1.3.2024</Text>
             </Text>
             
             {/* Scout */}
