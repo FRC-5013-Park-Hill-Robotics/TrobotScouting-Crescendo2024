@@ -4,7 +4,7 @@
     "slug": "tigerscouting",
     "privacy": "public",
     "description": "An easy, open source cloud-integrated scouting app made by 5013.",
-    "version": "1.0.1",
+    "version": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -22,7 +22,9 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
       "bundleIdentifier": "com.team5013.trobotscout",
+      "buildNumber":"1",
       "infoPlist": {
         "NSCameraUsageDescription": "Allow TrobotScout to access your camera. TrobotScout uses the camera exclusively to scan QR codes and allows you to connect to cloud storage buckets."
       }
@@ -55,6 +57,14 @@
         "expo-camera",
         {
           "cameraPermission": "Allow TrobotScout to access your camera. TrobotScout uses the camera exclusively to scan QR codes and allows you to connect to cloud storage buckets."
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
         }
       ]
     ],

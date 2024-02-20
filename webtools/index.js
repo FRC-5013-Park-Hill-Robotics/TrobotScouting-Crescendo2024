@@ -330,8 +330,8 @@ const downloadDataToXLSX = async () => {
                         Number(match[20]), //Broke
                         Number(match[21]), //Note Stuck
                         Number(match[22]), //DriverSkill
-                        match[22], //EventKey
-                        match[23] //comment
+                        match[23], //EventKey
+                        match[24] //comment
                     ]))
                 ]);
 
@@ -356,11 +356,12 @@ const downloadDataToXLSX = async () => {
                         pit[8], //CodeParadigm
                         pit[9], //HumanPlayer
                         pit[10], //UnderStage
-                        pit[11], //Stage/Climb
+                        pit[11], //StageClimb
                         pit[12], //ShootingLocations
                         pit[13], //OverallStatus
-                        pit[14], //comment
-                        pit[15] //photos
+                        pit[14], //eventkey
+                        pit[15], //comment
+                        pit[16] //photos
                     ]))
                 ]);
 
