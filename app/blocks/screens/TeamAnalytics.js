@@ -274,11 +274,10 @@ const TeamAnalytics = ({route, navigation}) => {
                 if (imageName != null) {
                 return (
 
-
                     <View key={imageindex} style={styles.rowAlignContainer}>
                     <Text style={styles.dataText}></Text>
                     <Image
-                        style={{width: 200, height: 250}}
+                        style={{width: 400, height: 600}}
                         source={{uri:getImage(imageName, firebaseURL, subpath)}}
                     />
                     
