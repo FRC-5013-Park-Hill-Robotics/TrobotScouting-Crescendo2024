@@ -1,7 +1,7 @@
 // Library imports
 import LZString from "lz-string";
 import { initializeApp, getApp, getApps, deleteApp } from "firebase/app";
-import { storage, ref, uploadBytes, listAll, getBlob, getDownloadURL, putFile } from "firebase/storage";
+import { storage, ref, uploadBytes, uploadBytesResumable, listAll, getBlob, getDownloadURL, putFile } from "firebase/storage";
 import { Promise } from "bluebird";
 
 // Component imports
@@ -59,8 +59,8 @@ const uploadImage = async (storage, uri, filepath) => {
 
     console.log(uri);
     console.log(filepath);
-       
-   try{
+
+    try{
         const blob = await new Promise((resolve, reject) => {
 
             const xhr = new XMLHttpRequest();
@@ -74,7 +74,8 @@ const uploadImage = async (storage, uri, filepath) => {
             xhr.open("GET", uri, true);
             xhr.send(null);
         });
-        await uploadBytes(storageRef, blob);
+        
+        await uploadBytesResumable(storageRef, blob);
     }catch(e){
         console.error(`Error Uploading image: ${e}`);
     }

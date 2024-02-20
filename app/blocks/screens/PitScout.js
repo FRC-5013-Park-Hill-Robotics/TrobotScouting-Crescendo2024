@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, Image, ScrollView, Modal,KeyboardAvoidingView, 
 import { LinearGradient } from 'expo-linear-gradient';
 import { Camera, CameraType, PermissionStatus } from 'expo-camera';
 
-import { BarCodeScanner } from 'expo-barcode-scanner';
 // Component imports
 import { fU, vh, vw } from '../../common/Constants';
 import { globalButtonStyles, globalInputStyles, globalTextStyles, globalContainerStyles } from '../../common/GlobalStyleSheet';
@@ -124,7 +123,6 @@ const PitScout = ({route, navigation}) =>
             setPhotos(data[16].split(","));
         }
     }
-    
 
     React.useEffect(() => {
         //Load setting defaults from tba and other settings if configured. 
@@ -159,7 +157,8 @@ const PitScout = ({route, navigation}) =>
     const ref = React.useRef(null);
 
     const handlePhoto = async () => {
-        const photo = await ref.current.takePictureAsync();
+        const options = { quality: 0.4, skipProcessing: true};
+        const photo = await ref.current.takePictureAsync(options);
 
         //console.log(photo.uri);
         const photopath = photo.uri;
@@ -194,8 +193,6 @@ const PitScout = ({route, navigation}) =>
         );
     }
 
-
-
     return (
         <View style={globalContainerStyles.topContainer}>
         <TTGradient/>
@@ -212,7 +209,7 @@ const PitScout = ({route, navigation}) =>
                 <Camera style={styles.camera} type={type} ref={ref}>
                     <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.button} onPress={handlePhoto}>
-                        <Text style={styles.text}>Take Photo</Text>
+                        <Text style={{...globalButtonStyles.primaryButton, fontFamily: "LGC", color: CS.light1, fontSize: 24*fU, alignSelf: "center",  textAlign: "center",width: "100%", margin: 3*vh}}>Take Photo</Text>
                     </TouchableOpacity>
                     </View>
                 </Camera>
@@ -358,7 +355,7 @@ const PitScout = ({route, navigation}) =>
                             boxCheckedStyle={{...globalButtonStyles.checkboxCheckedStyle}}
                         />
                     </View>
-                   <View style={{...styles.rowAlignContainer, zIndex: 6}}>
+                    <View style={{...styles.rowAlignContainer, zIndex: 6}}>
 
                     {/* climb */}
                         <TTDropdown 

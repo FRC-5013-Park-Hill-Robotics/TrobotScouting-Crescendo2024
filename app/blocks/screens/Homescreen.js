@@ -37,7 +37,7 @@ const Homescreen = ({route, navigation}) => {
                 fontFamily: "LGC Light",
                 letterSpacing: 0.5*vw
             }}>
-            <Text style={{fontFamily: "LGC Bold"}}>Trobots 5013 Scouting App - v1.3.2024</Text>
+            <Text style={{fontFamily: "LGC Bold"}}>Trobots 5013 Scouting App - v1.6.2024</Text>
             </Text>
             
             {/* Scout */}
