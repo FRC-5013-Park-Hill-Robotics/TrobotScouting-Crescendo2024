@@ -195,13 +195,15 @@ const CloudData = ({route, navigation}) => {
     // Ultra specified to work just for sorting by statistics
 
     const sortMatches = (teamData) => {
-        //Sort matches by matchtype and matchnumber
+        //Sort matches by matchtype, 5th element in team array, and matchnumber, 4th element
         const compareFunction = (a, b) => {
+
             return (
-                Number(a[4]) * 300 + Number(a[3]) -
-                Number(b[4]) * 300 + Number(b[3])
+                (Number(a[5])+1) * Number(a[4]) -
+                (Number(b[5])+1) * Number(b[4])
             )
         }
+        //console.log(teamData.sort(compareFunction));
         return teamData.sort(compareFunction);
     }
 
@@ -300,9 +302,15 @@ const CloudData = ({route, navigation}) => {
                         </Text>
                     </View>
                     <View>
-                        <Text style={topLabelStyle}>Misses</Text>
+                        <Text style={topLabelStyle}>Speaker</Text>
                         <Text style={bottomLabelStyle}>
-                            {statistics[props.teamNumber]?.misses}
+                            {statistics[props.teamNumber]?.speaker}
+                        </Text>
+                    </View>
+                    <View>
+                        <Text style={topLabelStyle}>Amp</Text>
+                        <Text style={bottomLabelStyle}>
+                            {statistics[props.teamNumber]?.amp}
                         </Text>
                     </View>
                 </View>
@@ -440,4 +448,4 @@ const CloudData = ({route, navigation}) => {
 }
 
 // Exports
-export default CloudData;
+export default CloudData ;
