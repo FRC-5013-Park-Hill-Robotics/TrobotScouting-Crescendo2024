@@ -10,6 +10,7 @@ import { globalContainerStyles, globalButtonStyles, globalInputStyles, globalTex
 import { TTGradient } from '../components/ExtraComponents';
 import { TTDropdown } from '../components/InputComponents';
 import { matchTypeValues, teamColorValues,stageValues } from './ScoutTeam';
+import {getSortedObjectOrder} from './CloudData';
 
 const chartableValues = ["Auto Points", "Teleop Points", "Speaker", "Amp", "Misses", "Endgame Points"];
 
@@ -133,9 +134,14 @@ const TeamAnalytics = ({route, navigation}) => {
 
     React.useEffect(() => {
         const matchAbbreviations = route.params.teamData.map((item) => {
-            return `${matchTypeValues[item[5]][1]}${item[4]}`;
+            var matchName = matchTypeValues[item[5]][0] + item[4].toString()
+            return `${matchName}`;
         });
-        setChartLabels(matchAbbreviations);        
+        
+        console.log(matchAbbreviations);
+      //  console.log(route.params.teamData);
+
+        setChartLabels(matchAbbreviations);
         setChartData(getSpecificData("Teleop Points"));
 
         setSubpath(route.params.settings.subpath);
@@ -147,7 +153,7 @@ const TeamAnalytics = ({route, navigation}) => {
         return (
             <View key={props.id} style={styles.matchDataContainer}>
                 <Text style={{...globalTextStyles.secondaryText, fontSize: 24*fU, color: CS.dark1}}>
-                    {matchTypeValues[props.matchData[5]]} {props.matchData[4]}  —  {teamColorValues[props.matchData[6]]}
+                    {matchTypeValues[props.matchData[5]]} {props.matchData[4]}  —  {teamColorValues[props.matchData[7]]}
                 </Text>
 
                 {/* Auto subcontainer */}
@@ -155,9 +161,10 @@ const TeamAnalytics = ({route, navigation}) => {
                     <Text style={{...globalTextStyles.secondaryText, fontSize: 20*fU, color: CS.dark1}}>
                         Auto
                     </Text>
-
-                    <Text style={styles.dataLabel}><Text style={styles.dataText}>{props.matchData[7] == 1 ? "" : "No"}</Text> Leave</Text>
-                    <Text style={styles.dataLabel}><Text style={styles.dataText}>{props.matchData[8] == 1 ? "" : "No"}</Text> Centerline Note Scored</Text>
+                    <View style={styles.rowAlignContainer}>
+                        <Text style={styles.dataLabel}><Text style={styles.dataText}>{props.matchData[7] == 1 ? "" : "No"}</Text> Leave</Text>
+                        <Text style={styles.dataLabel}><Text style={styles.dataText}>{props.matchData[8] == 1 ? "" : "No"}</Text> Centerline Note Scored</Text>
+                    </View>
                     <View style={styles.rowAlignContainer}>
                         <Text style={styles.dataLabel}>Speaker-<Text style={styles.dataText}>{props.matchData[9]}</Text></Text>
                         <Text style={styles.dataLabel}>Speaker Misses-<Text style={styles.dataText}>{props.matchData[10]}</Text></Text>
@@ -271,17 +278,16 @@ const TeamAnalytics = ({route, navigation}) => {
 
 
             { props.pitData[16].split(",").map((imageName, imageindex) => {
-                if (imageName != null) {
-                return (
+                if (imageName != null && imageName.trim().length > 1) {
 
+                return (
                     <View key={imageindex} style={styles.rowAlignContainer}>
-                    <Text style={styles.dataText}></Text>
+                    
                     <Image
-                        style={{width: 400, height: 600}}
+                        style={{ height: 350,width:200}}
                         source={{uri:getImage(imageName, firebaseURL, subpath)}}
                     />
                     
-                    <View style={{margin: 2*vh}}></View>
                     </View>
                 );
                 }
@@ -355,28 +361,32 @@ const TeamAnalytics = ({route, navigation}) => {
                     <View style={{margin: 1*vh}}/>
 
                     <Text style={styles.sectionTitle}>
-                        Team {route.params.teamNumber} Overview
+                        Team {route.params.teamNumber} Average
                     </Text>
 
                     <View style={{...styles.rowAlignContainer, paddingHorizontal: 3*vw}}>
-                        <View style={{...styles.columnContainer, alignItems: "center"}}>
+                        <View style={{...styles.centerContainer}}>
                             <Text style={styles.statHeader}>Played</Text>
                             <Text style={globalTextStyles.secondaryText}>{route.params.teamData.length}</Text>
                         </View>
                         <View style={{...styles.columnContainer, alignItems: "center"}}>
-                            <Text style={styles.statHeader}>Auto Avg</Text>
+                            <Text style={styles.statHeader}>Auto</Text>
                             <Text style={globalTextStyles.secondaryText}>{route.params.teamStatistics.auto}</Text>
                         </View>
                         <View style={{...styles.columnContainer, alignItems: "center"}}>
-                            <Text style={styles.statHeader}>Teleop Avg</Text>
+                            <Text style={styles.statHeader}>Teleop</Text>
                             <Text style={globalTextStyles.secondaryText}>{route.params.teamStatistics.teleop}</Text>
                         </View>
                         <View style={{...styles.columnContainer, alignItems: "center"}}>
-                            <Text style={styles.statHeader}>Miss Avg</Text>
-                            <Text style={globalTextStyles.secondaryText}>{route.params.teamStatistics.misses}</Text>
+                            <Text style={styles.statHeader}>Speaker</Text>
+                            <Text style={globalTextStyles.secondaryText}>{route.params.teamStatistics.speaker}</Text>
                         </View>
                         <View style={{...styles.columnContainer, alignItems: "center"}}>
-                            <Text style={styles.statHeader}>Endgame Avg</Text>
+                            <Text style={styles.statHeader}>Amp</Text>
+                            <Text style={globalTextStyles.secondaryText}>{route.params.teamStatistics.amp}</Text>
+                        </View>
+                        <View style={{...styles.columnContainer, alignItems: "center"}}>
+                            <Text style={styles.statHeader}>Endgame</Text>
                             <Text style={globalTextStyles.secondaryText}>{route.params.teamStatistics.endgame}</Text>
                         </View>
                     </View>
@@ -497,7 +507,7 @@ const styles = StyleSheet.create({
     },
     matchDataContainer: {
         ...globalContainerStyles.columnContainer,
-        alignItems: "center",
+   
         marginHorizontal: 2*vh,
         marginVertical: 1*vh,
         padding: 1*vh,
@@ -507,7 +517,7 @@ const styles = StyleSheet.create({
     },
     matchDataSubcontainer: {
         ...globalContainerStyles.columnContainer,
-        alignItems: "center",
+   
         padding: 1*vh,
         margin: 1*vh,
         

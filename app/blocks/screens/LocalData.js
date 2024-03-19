@@ -1,23 +1,20 @@
 // Library imports
-import * as React from 'react';
-import { getApp } from 'firebase/app';
-import { getStorage } from 'firebase/storage';
-import { LinearGradient } from 'expo-linear-gradient';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library'
 import * as Sharing from 'expo-sharing';
+import { getStorage } from 'firebase/storage';
+import * as React from 'react';
+import { ScrollView, Text, View } from 'react-native';
 
 
 // Component Imports
-import { fU, vh, vw } from '../../common/Constants';
+import { initializeFirebaseFromSettings, uploadMultipleStringsToCloud } from '../../common/CloudStorage';
 import { ColorScheme as CS } from '../../common/ColorScheme';
-import { TTGradient, TTConfirmation, TTLoading, TTWarning, TTAlert } from '../components/ExtraComponents';
-import { initializeFirebaseFromSettings, uploadStringToCloud, getAllFilesFromRef, uploadMultipleStringsToCloud } from '../../common/CloudStorage';
-import { deleteMultipleDataKeys, loadMatchData, removeNonMatchKeys, readData, saveMatchData, readMultipleDataKeys, readMultipleDataKeysString, loadSettings, deleteData, loadPitData } from '../../common/LocalStorage';
-import { TTButton, TTCheckbox, TTPushButton, TTSimpleCheckbox } from '../components/ButtonComponents';
-import { globalButtonStyles, globalInputStyles, globalTextStyles, globalContainerStyles } from '../../common/GlobalStyleSheet';
+import { fU, vh, vw } from '../../common/Constants';
+import { globalButtonStyles, globalContainerStyles, globalTextStyles } from '../../common/GlobalStyleSheet';
+import { deleteData, deleteMultipleDataKeys, loadMatchData, loadPitData, loadSettings, readMultipleDataKeys, removeNonMatchKeys } from '../../common/LocalStorage';
+import { TTButton } from '../components/ButtonComponents';
+import { TTAlert, TTConfirmation, TTGradient, TTLoading, TTWarning } from '../components/ExtraComponents';
 
 const fileDir = FileSystem.documentDirectory;
 
@@ -145,7 +142,7 @@ const LocalData = ({route, navigation}) => {
 		}
 
 		setLoadingVisible(false);
-		setAlertContent(["Success!", `Successfully uploaded file to the filesystem!`, null]);
+		setAlertContent(["Success!", `Successfully downloaded file to the filesystem!`, null]);
 		setTimeout(() => setAlertVisible(true), 500);
 
 		return;
