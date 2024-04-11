@@ -121,7 +121,7 @@ const LocalData = ({route, navigation}) => {
 		dataString =dataString + 'AutoAmp|AutoAmpMisses|';
 		dataString =dataString + 'TeleSpeaker|TeleAmplifiedSpeaker|TeleSpeakerMisses|';		
 		dataString =dataString + 'TeleAmp|TeleAmpMisses|';
-		dataString =dataString + 'Trap|StageClimb|Broke|NoteStuck|EventKey|Comments\n';
+		dataString =dataString + 'Trap|StageClimb|Broke|NoteStuck|EventKey|Comments|ShuttledNotes\n';
 		var i ;
 		for(i=0; i < multiStringData.length; i++){
 			dataString += `${multiStringData[i]}\n`;

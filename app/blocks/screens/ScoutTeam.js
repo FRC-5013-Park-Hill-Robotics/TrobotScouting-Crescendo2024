@@ -62,8 +62,8 @@ const ScoutTeam = ({route, navigation}) => {
     const [trap, setTrap] = React.useState(false);
     const [noteStuck, setNoteStuck] = React.useState(false);
     const [broke, setBroke] = React.useState(false);
-
-    const [stage, setStage] = React.useState("Stage Climb");
+    const [shuttleNotes, setShuttleNotes] = React.useState(false);
+    const [stage, setStage] = React.useState("None");
     const [driverSkill, setDriverSkill] = React.useState("");
     const [eventKey, setEventKey] = React.useState("");
     const [comments, setComments] = React.useState("");
@@ -112,6 +112,7 @@ const ScoutTeam = ({route, navigation}) => {
             // After Round
             eventKey, //23
             comments, //24
+            shuttleNotes ? 1 : 0, //25
         ];
 
         const matchCache = {
@@ -165,6 +166,7 @@ const ScoutTeam = ({route, navigation}) => {
         
         setEventKey(data[23]);
         setComments(data[24]);
+        setShuttleNotes(data[25]);
     }
     
 
@@ -537,15 +539,7 @@ const ScoutTeam = ({route, navigation}) => {
 
                     <Text style={styles.sectionHeader}>Endgame</Text>
                     <View style={{...styles.rowAlignContainer, zIndex: 7, flexGrow: 0.3}}>
-                    <TTSimpleCheckbox 
-                            state={trap}
-                            setState={setTrap}
-                            text="Trap?" 
-                            overallStyle={{height: "100%", alignSelf: "center"}}
-                            textStyle={{...globalTextStyles.labelText}}
-                            boxUncheckedStyle={{...globalButtonStyles.checkboxUncheckedStyle}}
-                            boxCheckedStyle={{...globalButtonStyles.checkboxCheckedStyle}}
-                        />
+                    <Text style={globalTextStyles.labelText}>Stage Climb: </Text>
                         <TTDropdown 
                             state={stage} 
                             setState={setStage} 
@@ -556,6 +550,26 @@ const ScoutTeam = ({route, navigation}) => {
                             textStyle={globalTextStyles.labelText}
                         />
 
+                    </View>
+                    <View style={{...styles.rowAlignContainer, zIndex: 6, flexGrow: 0.3}}>
+                    <TTSimpleCheckbox 
+                            state={trap}
+                            setState={setTrap}
+                            text="Trap?" 
+                            overallStyle={{height: "100%", alignSelf: "center"}}
+                            textStyle={{...globalTextStyles.labelText}}
+                            boxUncheckedStyle={{...globalButtonStyles.checkboxUncheckedStyle}}
+                            boxCheckedStyle={{...globalButtonStyles.checkboxCheckedStyle}}
+                        />
+                    <TTSimpleCheckbox 
+                            state={shuttleNotes}
+                            setState={setShuttleNotes}
+                            text="Shuttled Notes?" 
+                            overallStyle={{height: "100%", alignSelf: "center"}}
+                            textStyle={{...globalTextStyles.labelText}}
+                            boxUncheckedStyle={{...globalButtonStyles.checkboxUncheckedStyle}}
+                            boxCheckedStyle={{...globalButtonStyles.checkboxCheckedStyle}}
+                        />
                     </View>
                     <View style={{...styles.rowAlignContainer, zIndex: 6, flexGrow: 0.3}}>
 
@@ -580,7 +594,7 @@ const ScoutTeam = ({route, navigation}) => {
 
                     </View>
                     <View style={{...styles.rowAlignContainer, zIndex: 5, flexGrow: 0.3}}>
-                    <Text style={globalTextStyles.labelText}>Driver Skill</Text>
+                    <Text style={globalTextStyles.labelText}>Driver Skill: </Text>
                     <TTDropdown
                             state={driverSkill}
                             setState={setDriverSkill} 
