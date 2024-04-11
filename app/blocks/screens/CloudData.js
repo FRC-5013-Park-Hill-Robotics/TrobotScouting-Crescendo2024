@@ -31,6 +31,7 @@ const CloudData = ({route, navigation}) => {
     const [cloudData, setCloudData] = React.useState([]);
     const [pitData, setPitData] = React.useState([]);
     const [statistics, setStatistics] = React.useState([]);
+    const [trends, setTrends] = React.useState([]);
     const [teamOrder, setTeamOrder] = React.useState([]);
 
 
@@ -95,6 +96,41 @@ const CloudData = ({route, navigation}) => {
         
             //console.log(teamAverages);
         return teamAverages;
+    }
+    
+    // Calculates average statistics
+    const calculateTrendAverages = (stats) => {
+
+        const trendAverages = { total: 0, auto: 0, teleop: 0, misses: 0, speaker: 0, amp: 0, endgame: 0 };
+        const count = Object.keys(stats).length;
+
+        for (const team of Object.keys(stats)) {
+
+            const teamstat = stats[team];
+            //console.log(teamstat);
+
+            // For every team, add to the trend average for each stat          
+            trendAverages.total = Number(teamstat.total) + trendAverages.total;
+            trendAverages.auto = Number(teamstat.auto) + trendAverages.auto;
+            trendAverages.teleop = Number(teamstat.teleop) + trendAverages.teleop;
+            trendAverages.misses = Number(teamstat.misses) + trendAverages.misses;
+            trendAverages.endgame = Number(teamstat.endgame) + trendAverages.endgame;
+            trendAverages.speaker = Number(teamstat.speaker) + trendAverages.speaker;
+            trendAverages.amp = Number(teamstat.amp) + trendAverages.amp;
+
+        }
+
+        trendAverages.total = Math.round(10*trendAverages.total / count) / 10;
+        trendAverages.auto = Math.round(10*trendAverages.auto / count) / 10;
+        trendAverages.teleop = Math.round(10*trendAverages.teleop / count) / 10;
+        trendAverages.misses = Math.round(10*trendAverages.misses / count) / 10;
+        trendAverages.endgame = Math.round(10*trendAverages.endgame / count) / 10;
+        trendAverages.speaker = Math.round(10*trendAverages.speaker / count) / 10;
+        trendAverages.amp = Math.round(10*trendAverages.amp / count) / 10;
+
+        //console.log(trendAverages);
+    
+        return trendAverages;
     }
 
     const coneCounterSettings = {
@@ -222,6 +258,7 @@ const CloudData = ({route, navigation}) => {
                 setCloudData(loadedCache);
                 setTeamOrder(Object.keys(loadedCache));
                 setStatistics(calculateAverages(loadedCache));
+                setTrends(calculateTrendAverages(calculateAverages(loadedCache)));
             }
             if (loadedPitCache !== null) {
                 setPitData(loadedPitCache);
@@ -250,7 +287,7 @@ const CloudData = ({route, navigation}) => {
         setPitData(downloadedPitData);
         setTeamOrder(Object.keys(downloadedData));
         setStatistics(calculateAverages(downloadedData));
- 
+        setTrends(calculateTrendAverages(calculateAverages(loadedCache)));
         setLoadingVisible(false);
     }
 
@@ -277,6 +314,7 @@ const CloudData = ({route, navigation}) => {
                                         settings: settings,
                                         teamData: Object.keys(cloudData).includes(props.teamNumber)? sortMatches(cloudData[props.teamNumber]):[],
                                         pitData: Object.keys(pitData).includes(props.teamNumber)? pitData[props.teamNumber]:[],
+                                        trends: trends,
                                     })
                             }
                         }

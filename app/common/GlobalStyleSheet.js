@@ -223,7 +223,7 @@ const globalContainerStyles = StyleSheet.create({
     columnContainer: {
         flex: 1,
         flexDirection: "column",
-        justifyContent: "center"
+        justifyContent: "space-evenly"
     },
     rowContainer: {
         flex: 1,
