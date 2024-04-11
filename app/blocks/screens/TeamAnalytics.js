@@ -9,6 +9,7 @@ import { fU, vh, vw } from '../../common/Constants';
 import { globalContainerStyles, globalButtonStyles, globalInputStyles, globalTextStyles } from '../../common/GlobalStyleSheet';
 import { TTGradient } from '../components/ExtraComponents';
 import { TTDropdown } from '../components/InputComponents';
+import { TTButton, TTSimpleCheckbox } from '../components/ButtonComponents';
 import { matchTypeValues, teamColorValues,stageValues } from './ScoutTeam';
 import {getSortedObjectOrder} from './CloudData';
 
@@ -18,10 +19,13 @@ const TeamAnalytics = ({route, navigation}) => {
 
     // States
     const [chartValue, setChartValue] = React.useState("Teleop Points");
+    const [showTrend,setShowTrend] = React.useState(false);
     const [chartData, setChartData] = React.useState([]);
+    const [chartTrend, setChartTrend]= React.useState([]);
     const [chartLabels, setChartLabels] = React.useState([]);
     const [firebaseURL,setFirebaseURL] = React.useState("");
     const [subpath,setSubpath] = React.useState("");
+    const [dataset, setDataset] = React.useState({});
 
     const checkEmptyComments = () => {
         for (const match of route.params.teamData) {
@@ -132,17 +136,66 @@ const TeamAnalytics = ({route, navigation}) => {
         }
     }
 
+    const getTrendData = (section) => {
+    
+        switch (section) {
+            case ("Total Points"): {
+                const points = route.params.teamData.map((md) => {
+                    return route.params.trends.total;
+                });
+                return points;
+            } break;
+            case ("Auto Points"): {
+                const points = route.params.teamData.map((md) => {
+                    return route.params.trends.auto;
+                });
+                return points;
+            } break;
+            case ("Teleop Points"): {
+                const points = route.params.teamData.map((md) => {
+                    return route.params.trends.teleop;
+                });
+                return points;
+            } break;
+            case ("Misses"): {
+                const points = route.params.teamData.map((md) => {
+                    return route.params.trends.misses;
+                });
+                return points;
+            } break;
+            case ("Endgame Points"): {
+                const points = route.params.teamData.map((md) => {
+                    return route.params.trends.endgame;
+                });
+                return points;
+            } break;
+            case ("Speaker"): {
+                const points = route.params.teamData.map((md) => {
+                    return route.params.trends.speaker;
+                });
+                return points;
+            } break;
+            case ("Amp"): {
+                const points = route.params.teamData.map((md) => {
+                    return route.params.trends.amp;
+                });
+                return points;
+            } break;
+        } 
+    }
+
     React.useEffect(() => {
         const matchAbbreviations = route.params.teamData.map((item) => {
             var matchName = matchTypeValues[item[5]][0] + item[4].toString()
             return `${matchName}`;
         });
         
-        console.log(matchAbbreviations);
+       // console.log(matchAbbreviations);
       //  console.log(route.params.teamData);
 
         setChartLabels(matchAbbreviations);
         setChartData(getSpecificData("Teleop Points"));
+        setChartTrend(getTrendData("Teleop Points"));
 
         setSubpath(route.params.settings.subpath);
         setFirebaseURL(route.params.settings.cloudConfig.storageBucket);
@@ -192,7 +245,10 @@ const TeamAnalytics = ({route, navigation}) => {
                     </View>
                     <View style={styles.rowAlignContainer}>
                         <Text style={styles.dataLabel}>Climb-<Text style={styles.dataText}>{stageValues[props.matchData[19]]}</Text></Text>
+                    </View>
+                    <View style={styles.rowAlignContainer}>
                         <Text style={styles.dataLabel}><Text style={styles.dataText}>{props.matchData[18] == 1 ? "Did" : "Did not"}</Text> trap</Text>
+                        <Text style={styles.dataLabel}><Text style={styles.dataText}>{props.matchData[25] == 1 ? "Did" : "Did not"}</Text> shuttle notes</Text>
                     </View>
                     <View style={styles.rowAlignContainer}>
                         <Text style={styles.dataLabel}><Text style={styles.dataText}>{props.matchData[20] == 1 ? "Did" : "Did not"}</Text> break</Text>
@@ -305,15 +361,24 @@ const TeamAnalytics = ({route, navigation}) => {
 
             if (chartLabels.length === 0 || chartData.length === 0) return;
 
+            if (showTrend) {
+
             // Centering this is a remarkable pain
             return (
                 <View style={{alignItems: "center", justifyContent: "center", marginTop: 4*vh, marginRight: 4*vw}}>
                     <LineChart
                         data={{
                             labels: chartLabels,
-                            datasets: [{
-                                data: chartData
-                            }],
+                            datasets: [
+                                {
+                                    data: chartTrend,
+                                    color: (opacity = 1) => `rgba(204,65,65, ${opacity})`, // optional
+                                    withDots: false,
+                                },
+                                {
+                                    data: chartData,
+                                },
+                            ],
                         }}
                         width={90*vw}
                         height={70*vw}
@@ -328,7 +393,7 @@ const TeamAnalytics = ({route, navigation}) => {
                             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                             decimalPlaces: 0,
                             propsForDots: {
-                                r: 1*vh,
+                                r: .6*vh,
                                 strokeWidth: 0,
                             },
                             propsForLabels: {
@@ -339,7 +404,45 @@ const TeamAnalytics = ({route, navigation}) => {
                         }}
                     />
                 </View>
-        );
+                );
+            } else {
+                return (
+                    <View style={{alignItems: "center", justifyContent: "center", marginTop: 4*vh, marginRight: 4*vw}}>
+                        <LineChart
+                            data={{
+                                labels: chartLabels,
+                                datasets: [
+                                    {
+                                        data: chartData,
+                                    },
+                                ],
+                            }}
+                            width={90*vw}
+                            height={70*vw}
+                            yAxisInterval={1}
+                            segments={Math.min(Math.max(...chartData), 9)}
+                            fromZero={true}
+                            withOuterLines={false}
+                            chartConfig={{
+                                backgroundGradientFromOpacity: 0,
+                                backgroundGradientToOpacity: 0,
+                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                decimalPlaces: 0,
+                                propsForDots: {
+                                    r: .6*vh,
+                                    strokeWidth: 0,
+                                },
+                                propsForLabels: {
+                                    fontSize: 8
+                                }
+                            }}
+                            style={{
+                            }}
+                        />
+                    </View>
+                );
+            }
     }
 
     return (
@@ -419,6 +522,7 @@ const TeamAnalytics = ({route, navigation}) => {
                                     setState={(value) => {
                                         setChartValue(value);
                                         setChartData(getSpecificData(value));
+                                        setChartTrend(getTrendData(value));
                                     }} 
                                     items={chartableValues}
                                     boxWidth={50*vw}
@@ -429,6 +533,20 @@ const TeamAnalytics = ({route, navigation}) => {
                                     zIndex={5}
                                 />
                             </View>
+
+                            <View>
+                            <TTSimpleCheckbox 
+                                state={showTrend}
+                                setState= {(value) => {
+                                    setShowTrend(value);
+                                }}
+                                text="Show Overall Average?" 
+                                textStyle={globalTextStyles.labelText}
+                                boxUncheckedStyle={globalButtonStyles.checkboxUncheckedStyle}
+                                boxCheckedStyle={globalButtonStyles.checkboxCheckedStyle}
+                            />
+                            </View>
+
                             <PerformanceChart/>
                         </View>
                     }
